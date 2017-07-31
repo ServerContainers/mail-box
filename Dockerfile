@@ -18,11 +18,10 @@ RUN apk update \
             dovecot-pigeonhole-plugin \
  && apk add postfix \
             postfix-mysql \
- && rm -rf /var/cache/apk/*
-
-COPY config /etc/
-
-RUN echo ">> add user" \
+ && rm -rf /var/cache/apk/* \
+ \
+ \
+ && echo ">> add user" \
  && deluser vmail \
  && adduser -g vmail -u 5000 vmail -h /var/vmail -s /bin/false -D \
     \
@@ -30,6 +29,8 @@ RUN echo ">> add user" \
     \
  && openssl dhparam -out /etc/postfix/dh1024.pem 1024 \
  && openssl dhparam -out /etc/postfix/dh512.pem 512
+
+ COPY config /etc/
 
 # postfix
 EXPOSE 25 465 587

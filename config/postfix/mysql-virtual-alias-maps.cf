@@ -1,0 +1,4 @@
+dbname = [DB_NAME]
+user = [DB_USER]
+password = [DB_PASSWORD]
+hosts = [MYSQL_HOST]:[MYSQL_PORT]

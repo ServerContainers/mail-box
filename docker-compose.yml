@@ -1,0 +1,83 @@
+version: '3.3'
+
+services:
+
+# the following mail-box container could be installed on a private server at your home
+# use dyndns to get a domain and don't add it to your MX records, just let the
+# public-mail-gateway forward your mails to this domain
+
+  mail-box:
+    image: servercontainers/mail-box
+    restart: always
+    environment:
+      MAIL_FQDN: mail01.test.tld
+      POSTFIX_SMTPD_BANNER: mail01.test.tld ESMTP
+
+      RELAYHOST: "test.tld:25"
+
+      POSTFIX_QUEUE_LIFETIME_MAX: 11d
+      POSTFIX_QUEUE_LIFETIME_BOUNCE: 10d
+
+      POSTFIX_RELAY_DOMAINS: domain1.tld domain2.tld domainN.tld
+    volumes:
+      - ./data/tls-box:/etc/postfix/tls:ro
+    ports:
+      - "25:25"
+    networks:
+      - mail-public
+
+# this public-mail-gateway could be installed on a vserver with static ip
+# this way you hide the random ip of your personal internet connection
+
+  public-mail-gateway:
+    image: servercontainers/mail-gateway
+    restart: always
+    environment:
+      MAIL_FQDN: mail01.test.tld
+      POSTFIX_SMTPD_BANNER: mail01.test.tld ESMTP
+
+      RELAYHOST: "[mail-box]:25"
+
+      POSTFIX_QUEUE_LIFETIME_MAX: 11d
+      POSTFIX_QUEUE_LIFETIME_BOUNCE: 10d
+
+      POSTFIX_RELAY_DOMAINS: domain1.tld domain2.tld domainN.tld
+    volumes:
+      - ./data/tls-public:/etc/postfix/tls:ro
+    ports:
+      - "25:25"
+    networks:
+      - mail-public
+
+
+# it might make sense to put this service to a server with a static ip.
+# see it as your smarthost - and to overcome your randomized ip
+
+  private-mail-gateway:
+    image: servercontainers/mail-gateway
+    restart: always
+    environment:
+      MAIL_FQDN: mail01.test.tld
+      POSTFIX_SMTPD_BANNER: mail01.test.tld ESMTP
+
+      DISABLE_AMAVIS: disabled
+
+      POSTFIX_SSL_IN_SECURITY_LEVEL: may
+
+      POSTFIX_QUEUE_LIFETIME_MAX: 2d
+      POSTFIX_QUEUE_LIFETIME_BOUNCE: 1d
+
+      DKIM_DOMAINS: domain1.tld domain2.tld domainN.tld
+    volumes:
+      - ./data/additional-private:/etc/postfix/additional
+      - ./data/tls-private:/etc/postfix/tls:ro
+    ports:
+      - "587:25"
+    networks:
+      - mail-private
+
+networks:
+  mail-private:
+    driver: bridge
+  mail-public:
+    driver: bridge

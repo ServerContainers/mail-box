@@ -39,7 +39,7 @@ __OFFICIAL USER DATABASE CONFIGURATION ENVIRONMENT VARIABLES__
     - default: _SELECT email as user, password FROM virtual_users WHERE email='%u';"_
 
 __OFFICIAL DATABASE ENVIRONMENT VARIABLES__
-- MYSQL_USER__
+- MYSQL_USER
     - no default - if null it won't start
 - MYSQL_PASSWORD
     - no default - if null it won't start
@@ -47,7 +47,7 @@ __OFFICIAL DATABASE ENVIRONMENT VARIABLES__
     - default: _mysql_
 - MYSQL_PORT
     - default: _3306_ - if you use a different mysql port change it
-- MYSQL\_DBNAME__
+- MYSQL\_DBNAME
     - default: _mailserver_
 
 __OFFICIAL MAIL ENVIRONMENT VARIABLES__

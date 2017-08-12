@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 #
 # can be done on every start...

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 wait_db() {
-  while ! mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD &> /dev/null
+  while ! echo 'SHOW DATABASES' | mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD &> /dev/null
   do
     echo -n .
     sleep 1

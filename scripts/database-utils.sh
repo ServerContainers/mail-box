@@ -67,7 +67,7 @@ add_user() {
 }
 
 clear_db() {
-  run_mysql "DELETE FROM virtual_aliases;
-  run_mysql "DELETE FROM virtual_users;
-  run_mysql "DELETE FROM virtual_domains;
+  run_mysql "DELETE FROM virtual_aliases;"
+  run_mysql "DELETE FROM virtual_users;"
+  run_mysql "DELETE FROM virtual_domains;"
 }

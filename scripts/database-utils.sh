@@ -5,7 +5,7 @@ init_db() {
 }
 
 run_mysql() {
-  echo "$1" | mysql -h $MYSQL_HOST:$MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DBNAME | sed '1d'
+  echo "$1" | mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DBNAME | sed '1d'
 }
 
 get_domain_from_email() {

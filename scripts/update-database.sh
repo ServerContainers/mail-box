@@ -2,6 +2,9 @@
 
 source /usr/local/bin/database-utils.sh
 
+echo ">> wait for mysqldb"
+wait_db
+
 echo ">> init db (if necessary)"
 init_db
 

@@ -1,5 +1,14 @@
 #!/bin/sh
 
+wait_db() {
+  while ! mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD &> /dev/null
+  do
+    echo -n .
+    sleep 1
+  done
+  echo
+}
+
 init_db() {
   mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DBNAME < /mysql-data-scheme.sql
 }

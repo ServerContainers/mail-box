@@ -6,6 +6,7 @@ RUN apk update \
  && apk add runit \
             rsyslog \
             openssl \
+            mariadb-client \
  \
  && echo ">> configure logging" \
  && cat /etc/rsyslog.conf | grep -v '^#' | grep '^\$' | sed '/imklog.so/d' > /etc/rsyslog.conf.new \
@@ -41,4 +42,5 @@ EXPOSE 110 143 993 995 4190
 VOLUME ["/etc/postfix/tls", "/etc/postfix/additional", "/var/vmail"]
 
 COPY scripts /usr/local/bin
+COPY mysql-data-scheme.sql /mysql-data-scheme.sql
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

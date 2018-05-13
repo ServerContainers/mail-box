@@ -40,18 +40,18 @@ if [ ! -f "$INITIALIZED" ]; then
 
   if [ -z ${MYSQL_HOST+x} ]
   then
-    MYSQL_HOST=mysql
+    export MYSQL_HOST=mysql
   fi
 
   if [ -z ${MYSQL_PORT+x} ]
   then
-    MYSQL_PORT=3306
+    export MYSQL_PORT=3306
   fi
   echo ">> using '$MYSQL_HOST:$MYSQL_PORT' as Database Server"
 
   if [ -z ${MYSQL_DBNAME+x} ]
   then
-    MYSQL_DBNAME="mailserver"
+    export MYSQL_DBNAME="mailserver"
   fi
   echo ">> using '$MYSQL_DBNAME' as Database Name"
 
@@ -105,6 +105,9 @@ if [ ! -f "$INITIALIZED" ]; then
   sed -i "s/\[DB_USER\]/$MYSQL_USER/g" /etc/dovecot/dovecot-sql.conf.ext
   sed -i "s/\[DB_PASSWORD\]/$MYSQL_PASSWORD/g" /etc/dovecot/dovecot-sql.conf.ext
   sed -i "s/\[DEFAULT_PASS_SCHEME\]/$DEFAULT_PASS_SCHEME/g" /etc/dovecot/dovecot-sql.conf.ext
+
+  # update database if necessary
+  update-database.sh
 
   #
   # General

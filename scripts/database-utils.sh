@@ -12,7 +12,7 @@ get_domain_from_email() {
   EMAIL=$1
 
   # if it's an email address extract domain
-  echo $EMAIL | grep '@' 2>/dev/null >/dev/null && EMAIL=$(echo $EMAIL | sed 's/.@//g')
+  echo $EMAIL | grep '@' 2>/dev/null >/dev/null && EMAIL=$(echo $EMAIL | sed 's/^.*@//g')
 
   echo $EMAIL
 }

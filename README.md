@@ -50,6 +50,29 @@ __OFFICIAL DATABASE ENVIRONMENT VARIABLES__
 - MYSQL\_DBNAME
     - default: _mailserver_
 
+__OFFICIAL DATABASE MANAGMENT ENVIRONMENT VARIABLES__
+
+_the following variables can be used for initializing/managing the database_
+
+- ACONF_CLEAR_DB
+    - set this to `true` and the database gets cleared
+    - _might be used if you configure everything using envs and don't won't to keep outdated configuration_
+    - might bringt a few seconds more downtime to the mail service
+
+_the next one's need to be used to create a user/email, add a password hash to it and configure it's aliases_
+
+- ACONF_USER_ACCOUNT_NAME_[...]
+    - `[...]` must be replaced with an id to connect all the envs for one account together
+    - the email address is specified in the value. e.g.: `test@mail.tld`
+
+- ACONF_USER_PASSWORD_HASH_[...]
+    - `[...]` must be replaced with an id to connect all the envs for one account together
+    - the password hash is specified in the value. e.g.: `{BLF-CRYPT}$2a$05$asdfasdfsadfasf...`
+
+- ACONF_USER_ALIASES_[...]
+    - `[...]` must be replaced with an id to connect all the envs for one account together
+    - the aliases for this users email are specified (use a blank to seperate multiplte) in the value. e.g.: `postmaster@mail.tld admin@mail.tld info@mail.tld`
+
 __OFFICIAL MAIL ENVIRONMENT VARIABLES__
 
 - MAIL_POSTMASTER_ADDRESS

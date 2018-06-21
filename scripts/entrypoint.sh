@@ -180,8 +180,8 @@ smtp_tls_key_file=$POSTFIX_SSL_OUT_KEY
 
 smtp_tls_exclude_ciphers = aNULL, DES, RC4, MD5, 3DES
 smtp_tls_mandatory_exclude_ciphers = aNULL, DES, RC4, MD5, 3DES
-smtp_tls_protocols = !SSLv2 !SSLv3
-smtp_tls_mandatory_protocols = !SSLv2, !SSLv3
+smtp_tls_protocols = !SSLv3
+smtp_tls_mandatory_protocols = !SSLv3
 smtp_tls_mandatory_ciphers=high
 
 smtp_tls_session_cache_database = btree:\${data_directory}/smtp_scache
@@ -222,8 +222,8 @@ smtpd_tls_key_file=$POSTFIX_SSL_IN_KEY
 
 smtpd_tls_exclude_ciphers = aNULL, DES, RC4, MD5, 3DES
 smtpd_tls_mandatory_exclude_ciphers = aNULL, DES, RC4, MD5, 3DES
-smtpd_tls_protocols = !SSLv2 !SSLv3
-smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
+smtpd_tls_protocols = !SSLv3
+smtpd_tls_mandatory_protocols = !SSLv3
 smtpd_tls_mandatory_ciphers=high
 
 smtpd_tls_session_cache_database = btree:\${data_directory}/smtpd_scache

@@ -133,7 +133,6 @@ if [ ! -f "$INITIALIZED" ]; then
   MAILDOMAIN=$(echo "$MAIL_FQDN" | cut -d'.' -f2-)
 
   echo ">> set mail host to: $MAIL_FQDN"
-  sed -i '12a\$myhostname = "'"$MAIL_FQDN"'";\' etc/amavis/conf.d/05-node_id
   echo "$MAIL_FQDN" > /etc/mailname
   echo "$MAIL_NAME" > /etc/hostname
   postconf -e "myhostname=$MAIL_FQDN"

@@ -28,7 +28,7 @@ sample_directory = /etc/postfix
 readme_directory = /usr/share/doc/postfix/readme
 
 meta_directory = /etc/postfix
-shlib_directory = /usr/lib/postfix
+shlib_directory = no # fix for restart-loop
 
 mydestination =
 

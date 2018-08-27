@@ -2,7 +2,9 @@ compatibility_level = 2
 
 queue_directory = /var/spool/postfix
 command_directory = /usr/sbin
-daemon_directory = /usr/lib/postfix
+daemon_directory = /usr/lib/postfix/sbin
+shlib_directory = /usr/lib/postfix
+meta_directory = /etc/postfix
 data_directory = /var/lib/postfix
 
 mail_owner = postfix

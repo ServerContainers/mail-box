@@ -7,14 +7,11 @@ _maintained by ServerContainers_
 
 This Dockerfile (available as ___servercontainers/mail-box___) gives you a dovecot and postfix installation is meant to store mails, handle authentication and users and is based on the famous [Wordaround.org - ISP Mail Tutorials](https://workaround.org/ispmail)
 
-It's based on the [_/alpine](https://registry.hub.docker.com/_/alpine/) Image
+It's based on the [_/debian:stretch](https://registry.hub.docker.com/_/debian/) Image
 
 View in Docker Registry [servercontainers/mail-box](https://registry.hub.docker.com/u/servercontainers/mail-box/)
 
 View in GitHub [ServerContainers/mail-box](https://github.com/ServerContainers/mail-box)
-
-__It supports B-CRYPT!!!__
-Since it uses alpine as baseimage, it's able to support BCrypt password hashing! :)
 
 All the user backend SQL Statements can be modified. By default they use the default isp mail statements and database scheme.
 
@@ -24,7 +21,8 @@ __OFFICIAL USER DATABASE CONFIGURATION ENVIRONMENT VARIABLES__
 
 - DEFAULT_PASS_SCHEME
     - dovecot default_pass_scheme for the password hashes (see dovecot manual)
-    - default: _BLF-CRYPT_
+    - default: _SHA512-CRYPT_
+    - generate using: `doveadm pw -s SHA512-CRYPT`
 
 - SQL_VIRTUAL_MAILBOX_DOMAIN
     - default: _SELECT 1 FROM virtual_domains WHERE name='%s'_
@@ -67,7 +65,8 @@ _the next one's need to be used to create a user/email, add a password hash to i
 
 - ACONF_USER_PASSWORD_HASH_[...]
     - `[...]` must be replaced with an id to connect all the envs for one account together
-    - the password hash is specified in the value. e.g.: `{BLF-CRYPT}$2a$05$asdfasdfsadfasf...`
+    - the password hash is specified in the value. e.g.: `{SHA512-CRYPT}$6$asdfasdfsadfasf...`
+    - Note: for a docker compose file you need to replace each `$` with a `$$` (then it's escaped and works)
 
 - ACONF_USER_ALIASES_[...]
     - `[...]` must be replaced with an id to connect all the envs for one account together

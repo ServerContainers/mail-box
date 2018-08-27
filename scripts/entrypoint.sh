@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #
 # can be done on every start...
@@ -69,7 +69,7 @@ if [ ! -f "$INITIALIZED" ]; then
 
   if [ -z ${DEFAULT_PASS_SCHEME+x} ]
   then
-    DEFAULT_PASS_SCHEME="BLF-CRYPT"
+    DEFAULT_PASS_SCHEME="SHA512-CRYPT"
   fi
   echo ">> using '$DEFAULT_PASS_SCHEME' as Dovecots default_pass_scheme"
 
@@ -338,8 +338,8 @@ EOF
   mkdir -p /etc/sv/rsyslog /etc/sv/postfix /etc/sv/dovecot
   echo -e '#!/bin/sh\nexec /usr/sbin/rsyslogd -n' > /etc/sv/rsyslog/run
     echo -e '#!/bin/sh\nrm /var/run/rsyslogd.pid' > /etc/sv/rsyslog/finish
-  echo -e '#!/bin/sh\n/usr/sbin/postfix start; sleep 5; while ps aux | grep [p]ostfix | grep [m]aster > /dev/null 2> /dev/null; do sleep 5; done' > /etc/sv/postfix/run
-    echo -e '#!/bin/sh\n/usr/sbin/postfix stop' > /etc/sv/postfix/finish
+  echo -e '#!/bin/sh\nservice postfix start; sleep 5; while ps aux | grep [p]ostfix | grep [m]aster > /dev/null 2> /dev/null; do sleep 5; done' > /etc/sv/postfix/run
+    echo -e '#!/bin/sh\nservice postfix stop' > /etc/sv/postfix/finish
   echo -e '#!/bin/sh\nexec /usr/sbin/dovecot -F | logger -t dovecot' > /etc/sv/dovecot/run
   chmod a+x /etc/sv/*/run /etc/sv/*/finish
 

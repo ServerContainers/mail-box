@@ -2,11 +2,26 @@ version: '3.3'
 
 services:
 
+  mysql:
+    image: servercontainers/mysql
+    restart: always
+    environment:
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: password
+      BACKUP_ENABLED: enable
+      DB_NAME: mailserver
+      DB_USER: exampleuser
+      DB_PASSWORD: examplepassword
+    networks:
+      - mail-public
+
+
 # the following mail-box container could be installed on a private server at your home
 # use dyndns to get a domain and don't add it to your MX records, just let the
 # public-mail-gateway forward your mails to this domain
 
   mail-box:
+    build: .
     image: servercontainers/mail-box
     restart: always
     environment:
@@ -19,6 +34,9 @@ services:
       POSTFIX_QUEUE_LIFETIME_BOUNCE: 10d
 
       POSTFIX_RELAY_DOMAINS: domain1.tld domain2.tld domainN.tld
+
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepassword
     volumes:
       - ./data/tls-box:/etc/postfix/tls:ro
     ports:
@@ -45,7 +63,7 @@ services:
     volumes:
       - ./data/tls-public:/etc/postfix/tls:ro
     ports:
-      - "25:25"
+      - "26:25"
     networks:
       - mail-public
 

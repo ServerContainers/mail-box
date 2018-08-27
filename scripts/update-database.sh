@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 source /usr/local/bin/database-utils.sh
 
@@ -10,7 +10,7 @@ init_db
 
 if [ "$ACONF_CLEAR_DB" = 'true' ]; then
   echo ">> clearing old database"
-  clear_db  
+  clear_db
 fi
 
 env | grep '^ACONF_USER_ACCOUNT_NAME_' | while read I_CONF
@@ -31,6 +31,6 @@ do
   for ALIAS in $ALIASES;
   do
     echo "  >> adding alias $ALIAS"
-    add_virtual_alias "$ALIAS" "$EMAIL" 
+    add_virtual_alias "$ALIAS" "$EMAIL"
   done
 done

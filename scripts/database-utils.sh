@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 wait_db() {
   while ! echo 'SHOW DATABASES;' | mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD &> /dev/null
@@ -58,7 +58,7 @@ add_virtual_alias() {
     run_mysql "DELETE FROM virtual_aliases WHERE source = '$SOURCE_MAIL';"
 
     ID=$(add_domain_id "$SOURCE_MAIL")
-  
+
     [ $ID -gt 0 ] && run_mysql "INSERT into virtual_aliases (domain_id, source, destination) VALUES ('$ID', '$SOURCE_MAIL', '$DEST_MAIL');" >/dev/null
 
   fi
@@ -71,7 +71,7 @@ add_user() {
   run_mysql "DELETE FROM virtual_users WHERE email = '$LOGIN_EMAIL';"
 
   ID=$(add_domain_id "$LOGIN_EMAIL")
-  
+
   [ $ID -gt 0 ] && run_mysql "INSERT into virtual_users (domain_id, password, email) VALUES ('$ID', '$PASSWORD_HASH', '$LOGIN_EMAIL');" >/dev/null
 }
 

@@ -27,9 +27,6 @@ manpage_directory = /usr/share/man
 sample_directory = /etc/postfix
 readme_directory = /usr/share/doc/postfix/readme
 
-meta_directory = /etc/postfix
-shlib_directory = no # fix for restart-loop
-
 mydestination =
 
 virtual_mailbox_domains = mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf

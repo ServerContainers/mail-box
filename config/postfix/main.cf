@@ -36,7 +36,6 @@ virtual_mailbox_maps = mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
 virtual_alias_maps = mysql:/etc/postfix/mysql-virtual-alias-maps.cf,mysql:/etc/postfix/mysql-email2email.cf
 
 virtual_transport = lmtp:unix:private/dovecot-lmtp
-dovecot_destination_recipient_limit = 1
 
 smtpd_sasl_type = dovecot
 smtpd_sasl_path = private/auth

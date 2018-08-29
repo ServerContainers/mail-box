@@ -14,6 +14,7 @@ RUN apt-get -q -y update \
                           mariadb-client \
                           \
                           dovecot-imapd \
+                          dovecot-lmtpd \
                           dovecot-mysql \
                           dovecot-sieve dovecot-managesieved \
                           \

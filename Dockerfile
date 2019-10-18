@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 
 MAINTAINER MarvAmBass (https://github.com/ServerContainers)
 

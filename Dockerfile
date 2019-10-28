@@ -12,6 +12,7 @@ RUN apt-get -q -y update \
                           procps \
                           \
                           mariadb-client \
+                          mariadb-server \
                           \
                           dovecot-imapd \
                           dovecot-lmtpd \

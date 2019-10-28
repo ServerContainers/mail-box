@@ -59,7 +59,7 @@ if [ ! -f "$INITIALIZED" ]; then
 
     /usr/bin/mysqld_safe &
     echo -n ">> waiting for mysql socket."
-    while [ ! -e "/var/run/mysqld/mysqld.sock" ]; do echo -n"."; sleep 1; done
+    while [ ! -e "/var/run/mysqld/mysqld.sock" ]; do sleep 1; echo -n "."; done
     echo ""; echo ">> mysql socket found :)"
 
     echo "CREATE DATABASE $MYSQL_DBNAME;" > /tmp/autocreatedb.mysql

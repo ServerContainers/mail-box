@@ -42,7 +42,7 @@ if [ ! -f "$INITIALIZED" ]; then
   then
     export MYSQL_PORT=3306
   fi
-  echo ">> using '$MYSQL_HOST:$MYSQL_PORT' as Database Server"
+  echo ">> using '$MYSQL_PORT' as Database Server Port"
 
   if [ -z ${MYSQL_DBNAME+x} ]
   then
@@ -58,6 +58,7 @@ if [ ! -f "$INITIALIZED" ]; then
     export MYSQL_PASSWORD=dbpassword
 
     /usr/bin/mysqld_safe &
+    sleep 4
     
     echo "CREATE DATABASE $MYSQL_DBNAME;" > /tmp/autocreatedb.mysql
     echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';" >> /tmp/autocreatedb.mysql
@@ -69,6 +70,8 @@ if [ ! -f "$INITIALIZED" ]; then
     
     killall mysqld
   else
+    echo ">> using '$MYSQL_HOST' as Database Host"
+    
     if [ -z ${MYSQL_USER+x} ]
     then
       >&2 echo ">> you need to specify a Database User!"

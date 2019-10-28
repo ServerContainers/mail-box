@@ -58,8 +58,10 @@ if [ ! -f "$INITIALIZED" ]; then
     export MYSQL_PASSWORD=dbpassword
 
     /usr/bin/mysqld_safe &
-    sleep 4
-    
+    echo -n ">> waiting for mysql socket."
+    while [ ! -e "/var/run/mysqld/mysqld.sock" ]; do echo -n"."; sleep 1; done
+    echo ""; echo ">> mysql socket found :)"
+
     echo "CREATE DATABASE $MYSQL_DBNAME;" > /tmp/autocreatedb.mysql
     echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';" >> /tmp/autocreatedb.mysql
     echo "GRANT USAGE ON *.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;" >> /tmp/autocreatedb.mysql

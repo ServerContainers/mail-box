@@ -58,7 +58,7 @@ if [ ! -f "$INITIALIZED" ]; then
     export MYSQL_PASSWORD=dbpassword
 
     /usr/bin/mysqld_safe &
-    echo -n ">> waiting for mysql socket."
+    echo ">> waiting for mysql socket."
     while [ ! -e "/var/run/mysqld/mysqld.sock" ]; do sleep 1; echo -n "."; done
     echo ""; echo ">> mysql socket found :)"
 

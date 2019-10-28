@@ -7,7 +7,7 @@ _maintained by ServerContainers_
 
 This Dockerfile (available as ___servercontainers/mail-box___) gives you a dovecot and postfix installation is meant to store mails, handle authentication and users and is based on the famous [Wordaround.org - ISP Mail Tutorials](https://workaround.org/ispmail)
 
-It's based on the [_/debian:stretch](https://registry.hub.docker.com/_/debian/) Image
+It's based on the [_/debian:buster](https://registry.hub.docker.com/_/debian/) Image
 
 View in Docker Registry [servercontainers/mail-box](https://registry.hub.docker.com/u/servercontainers/mail-box/)
 
@@ -37,16 +37,20 @@ __OFFICIAL USER DATABASE CONFIGURATION ENVIRONMENT VARIABLES__
     - default: _SELECT email as user, password FROM virtual_users WHERE email='%u';"_
 
 __OFFICIAL DATABASE ENVIRONMENT VARIABLES__
+- MYSQL_HOST
+    - default: will start internal mysql daemon
 - MYSQL_USER
     - no default - if null it won't start
+    - optional if internal mysql is used
 - MYSQL_PASSWORD
     - no default - if null it won't start
-- MYSQL_HOST
-    - default: _mysql_
+    - optional if internal mysql is used
 - MYSQL_PORT
     - default: _3306_ - if you use a different mysql port change it
+    - optional if internal mysql is used
 - MYSQL\_DBNAME
     - default: _mailserver_
+    - optional if internal mysql is used
 
 __OFFICIAL DATABASE MANAGMENT ENVIRONMENT VARIABLES__
 

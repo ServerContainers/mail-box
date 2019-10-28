@@ -38,11 +38,6 @@ if [ ! -f "$INITIALIZED" ]; then
 
   # Variables
 
-  if [ -z ${MYSQL_HOST+x} ]
-  then
-    export MYSQL_HOST=mysql
-  fi
-
   if [ -z ${MYSQL_PORT+x} ]
   then
     export MYSQL_PORT=3306
@@ -55,16 +50,36 @@ if [ ! -f "$INITIALIZED" ]; then
   fi
   echo ">> using '$MYSQL_DBNAME' as Database Name"
 
-  if [ -z ${MYSQL_USER+x} ]
+  if [ -z ${MYSQL_HOST+x} ]
   then
-    >&2 echo ">> you need to specify a Database User!"
-    exit 2;
-  fi
+    echo ">> using local mysql server"
+    export MYSQL_HOST=localhost
+    export MYSQL_USER=dbuser
+    export MYSQL_PASSWORD=dbpassword
 
-  if [ -z ${MYSQL_PASSWORD+x} ]
-  then
-    >&2 echo ">> you need to specify a Password for the Database User!"
-    exit 2;
+    /usr/bin/mysqld_safe &
+    
+    echo "CREATE DATABASE $MYSQL_DBNAME;" > /tmp/autocreatedb.mysql
+    echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';" >> /tmp/autocreatedb.mysql
+    echo "GRANT USAGE ON *.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;" >> /tmp/autocreatedb.mysql
+    echo "GRANT ALL PRIVILEGES ON $MYSQL_DBNAME.* TO '$MYSQL_USER'@'%';" >> /tmp/autocreatedb.mysql
+    echo "FLUSH PRIVILEGES;" >> /tmp/autocreatedb.mysql
+
+    sh -c "mysql < /tmp/autocreatedb.mysql && echo '>> db '$MYSQL_DBNAME' successfully installed'; rm /tmp/autocreatedb.mysql; update-database.sh"
+    
+    killall mysqld
+  else
+    if [ -z ${MYSQL_USER+x} ]
+    then
+      >&2 echo ">> you need to specify a Database User!"
+      exit 2;
+    fi
+
+    if [ -z ${MYSQL_PASSWORD+x} ]
+    then
+      >&2 echo ">> you need to specify a Password for the Database User!"
+      exit 2;
+    fi
   fi
 
   if [ -z ${DEFAULT_PASS_SCHEME+x} ]
@@ -107,7 +122,9 @@ if [ ! -f "$INITIALIZED" ]; then
   sed -i "s/\[DEFAULT_PASS_SCHEME\]/$DEFAULT_PASS_SCHEME/g" /etc/dovecot/dovecot-sql.conf.ext
 
   # update database if necessary
-  update-database.sh
+  if [ "$MYSQL_HOST" != "localhost" ]; then
+    update-database.sh
+  fi
 
   #
   # General
@@ -335,18 +352,27 @@ EOF
   ###
 
   echo ">> RUNIT - create services"
-  mkdir -p /etc/sv/rsyslog /etc/sv/postfix /etc/sv/dovecot
+  mkdir -p /etc/sv/rsyslog /etc/sv/postfix /etc/sv/dovecot /etc/sv/mysqld
+  
+  echo -e '#!/bin/sh\nexec /usr/bin/mysqld_safe' > /etc/sv/mysqld/run
+    echo -e '#!/bin/sh\nkillall mysqld' > /etc/sv/mysqld/finish
+
+  
   echo -e '#!/bin/sh\nexec /usr/sbin/rsyslogd -n' > /etc/sv/rsyslog/run
     echo -e '#!/bin/sh\nrm /var/run/rsyslogd.pid' > /etc/sv/rsyslog/finish
+    
   echo -e '#!/bin/sh\nservice postfix start; sleep 5; while ps aux | grep [p]ostfix | grep [m]aster > /dev/null 2> /dev/null; do sleep 5; done' > /etc/sv/postfix/run
     echo -e '#!/bin/sh\nservice postfix stop' > /etc/sv/postfix/finish
+
   echo -e '#!/bin/sh\nexec /usr/sbin/dovecot -F | logger -t dovecot' > /etc/sv/dovecot/run
+  
   chmod a+x /etc/sv/*/run /etc/sv/*/finish
 
   echo ">> RUNIT - enable services"
   ln -s /etc/sv/dovecot /etc/service/dovecot
   ln -s /etc/sv/postfix /etc/service/postfix
   ln -s /etc/sv/rsyslog /etc/service/rsyslog
+  [ "$MYSQL_HOST" = "localhost" ] && ln -s /etc/sv/mysqld /etc/service/mysqld
 
 fi
 

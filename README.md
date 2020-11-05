@@ -1,8 +1,11 @@
 # Docker Mail Box Postfix/Dovecot/Sieve (servercontainers/mail-box)
 _maintained by ServerContainers_
 
-[FAQ - All you need to know about the servercontainers Containers](https://marvin.im/docker-faq-all-you-need-to-know-about-the-marvambass-containers/)
+## Changelogs
 
+* 2020-11-05
+    * multiarch build
+    
 ## What is it
 
 This Dockerfile (available as ___servercontainers/mail-box___) gives you a dovecot and postfix installation is meant to store mails, handle authentication and users and is based on the famous [Wordaround.org - ISP Mail Tutorials](https://workaround.org/ispmail)

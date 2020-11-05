@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /usr/local/bin/database-utils.sh
+source /container/scripts/database-utils.sh
 
 echo ">> wait for mysqldb"
 wait_db

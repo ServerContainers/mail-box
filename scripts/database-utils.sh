@@ -10,7 +10,7 @@ wait_db() {
 }
 
 init_db() {
-  mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DBNAME < /mysql-data-scheme.sql
+  mysql -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DBNAME < /container/mysql-data-scheme.sql
 }
 
 run_mysql() {

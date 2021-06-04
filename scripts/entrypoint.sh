@@ -381,6 +381,13 @@ EOF
 
 fi
 
+##
+# TLS Cert Renew Stuff
+##
+
+rm -rf /tmp/tls 2> /dev/null
+cp -a /etc/postfix/tls /tmp/tls
+
 echo ">> fix file permissions"
 chgrp postfix /etc/postfix/m*.cf
 chmod u=rw,g=r,o= /etc/postfix/m*.cf

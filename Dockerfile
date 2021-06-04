@@ -49,5 +49,5 @@ EXPOSE 110 143 993 995 4190
 VOLUME ["/etc/postfix/tls", "/etc/postfix/additional", "/var/vmail"]
 
 COPY . /container/
-
+HEALTHCHECK CMD ["/container/scripts/docker-healthcheck.sh"]
 ENTRYPOINT ["entrypoint.sh"]

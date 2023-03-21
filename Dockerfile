@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:bullseye
 
 ENV PATH="/container/scripts:${PATH}"
 ENV DEBIAN_FRONTEND noninteractive

@@ -1,8 +1,13 @@
-# Docker Mail Box Postfix/Dovecot/Sieve (servercontainers/mail-box)
+# Docker Mail Box Postfix/Dovecot/Sieve - (ghcr.io/servercontainers/mail-box) [x86 + arm]
 _maintained by ServerContainers_
 
 ## Changelogs
 
+* 2023-03-21
+    * major upgrade (base image etc.)
+    * new version tagging
+    * github action to build container
+    * implemented ghcr.io as new registry
 * 2021-07-28
     * healthcheck will fail if certificate is 3 days or less valid or already expired
 * 2021-06-04
@@ -12,11 +17,11 @@ _maintained by ServerContainers_
     
 ## What is it
 
-This Dockerfile (available as ___servercontainers/mail-box___) gives you a dovecot and postfix installation is meant to store mails, handle authentication and users and is based on the famous [Wordaround.org - ISP Mail Tutorials](https://workaround.org/ispmail)
+This Dockerfile (available as ___ghcr.io/servercontainers/mail-box___) gives you a dovecot and postfix installation is meant to store mails, handle authentication and users and is based on the famous [Wordaround.org - ISP Mail Tutorials](https://workaround.org/ispmail)
 
 It's based on the [_/debian:buster](https://registry.hub.docker.com/_/debian/) Image
 
-View in Docker Registry [servercontainers/mail-box](https://registry.hub.docker.com/u/servercontainers/mail-box/)
+View in GitHub Registry [ghcr.io/servercontainers/mail-box](https://ghcr.io/servercontainers/mail-box)
 
 View in GitHub [ServerContainers/mail-box](https://github.com/ServerContainers/mail-box)
 

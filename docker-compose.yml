@@ -3,7 +3,7 @@ version: '3.3'
 services:
 
   mysql:
-    image: servercontainers/mysql
+    image: ghcr.io/servercontainers/mysql
     restart: always
     environment:
       ADMIN_USER: admin
@@ -22,7 +22,7 @@ services:
 
   mail-box:
     build: .
-    image: servercontainers/mail-box
+    image: ghcr.io/servercontainers/mail-box
     restart: always
     environment:
       MAIL_FQDN: mail01.test.tld
@@ -48,7 +48,7 @@ services:
 # this way you hide the random ip of your personal internet connection
 
   public-mail-gateway:
-    image: servercontainers/mail-gateway
+    image: ghcr.io/servercontainers/mail-gateway
     restart: always
     environment:
       MAIL_FQDN: mail01.test.tld
@@ -72,7 +72,7 @@ services:
 # see it as your smarthost - and to overcome your randomized ip
 
   private-mail-gateway:
-    image: servercontainers/mail-gateway
+    image: ghcr.io/servercontainers/mail-gateway
     restart: always
     environment:
       MAIL_FQDN: mail01.test.tld

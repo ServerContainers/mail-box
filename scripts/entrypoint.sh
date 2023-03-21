@@ -1,5 +1,23 @@
 #!/bin/bash
 
+cat <<EOF
+################################################################################
+
+Welcome to the ghcr.io/servercontainers/mail-box
+
+################################################################################
+
+You'll find this container sourcecode here:
+
+    https://github.com/ServerContainers/mail-box
+
+The container repository will be updated regularly.
+
+################################################################################
+
+
+EOF
+
 #
 # can be done on every start...
 #

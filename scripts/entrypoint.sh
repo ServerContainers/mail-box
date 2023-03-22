@@ -414,5 +414,9 @@ chmod g+r /etc/dovecot/dovecot.conf
 chown root:root /etc/dovecot/dovecot-sql.conf.ext
 chmod go= /etc/dovecot/dovecot-sql.conf.ext
 
-echo ">> starting services"
-exec runsvdir -P /etc/service
+##
+# CMD
+##
+echo ">> CMD: exec docker CMD"
+echo "$@"
+exec "$@"

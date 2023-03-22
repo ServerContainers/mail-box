@@ -51,3 +51,4 @@ VOLUME ["/etc/postfix/tls", "/etc/postfix/additional", "/var/vmail"]
 COPY . /container/
 HEALTHCHECK CMD ["/container/scripts/docker-healthcheck.sh"]
 ENTRYPOINT ["entrypoint.sh"]
+CMD [ "runsvdir","-P", "/etc/service" ]

@@ -19,13 +19,24 @@ _maintained by ServerContainers_
 
 This Dockerfile (available as ___ghcr.io/servercontainers/mail-box___) gives you a dovecot and postfix installation is meant to store mails, handle authentication and users and is based on the famous [Wordaround.org - ISP Mail Tutorials](https://workaround.org/ispmail)
 
-It's based on the [_/debian:buster](https://registry.hub.docker.com/_/debian/) Image
+It's based on the [_/debian:bullseye](https://registry.hub.docker.com/_/debian/) Image
 
 View in GitHub Registry [ghcr.io/servercontainers/mail-box](https://ghcr.io/servercontainers/mail-box)
 
 View in GitHub [ServerContainers/mail-box](https://github.com/ServerContainers/mail-box)
 
 All the user backend SQL Statements can be modified. By default they use the default isp mail statements and database scheme.
+
+## Build & Versions
+
+You can specify `DOCKER_REGISTRY` environment variable (for example `my.registry.tld`)
+and use the build script to build the main container and it's variants for _x86_64, arm64 and arm_
+
+You'll find all images tagged like `d11.6-p3.5.17-0_deb11u1-dv1_2.3.13_dfsg1-2_deb11u1` which means `d<debian version>-p<postfix version (with some esacped chars)>-dv<dovecot-core version (with some esacped chars)>`.
+This way you can pin your installation/configuration to a certian version. or easily roll back if you experience any problems
+(don't forget to open a issue in that case ;D).
+
+To build a `latest` tag run `./build.sh release`
 
 ## Environment variables
 

@@ -3,6 +3,8 @@ _maintained by ServerContainers_
 
 ## Changelogs
 
+* 2024-07-18
+    * dovecot ssl fixes - min version TLSv1.0
 * 2023-03-21
     * major upgrade (base image etc.)
     * new version tagging

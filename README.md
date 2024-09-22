@@ -3,6 +3,9 @@ _maintained by ServerContainers_
 
 ## Changelogs
 
+* 2024-09-22
+    * postfix tls fixes
+    * postfix config fixes
 * 2024-07-18
     * dovecot ssl fixes - min version TLSv1.0
 * 2023-03-21

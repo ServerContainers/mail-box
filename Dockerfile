@@ -35,6 +35,7 @@ RUN apt-get -q -y update \
  \
  && touch /etc/mtab \
  \
+ && openssl dhparam -out /etc/postfix/dh2048.pem 2048 \
  && openssl dhparam -out /etc/postfix/dh1024.pem 1024 \
  && openssl dhparam -out /etc/postfix/dh512.pem 512
 

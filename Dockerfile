@@ -33,10 +33,7 @@ RUN apt-get -q -y update \
  && addgroup --gid 5000 vmail \
  && adduser --ingroup vmail --uid 5000 --home /var/vmail --shell /bin/false --disabled-password --gecos "" vmail \
  \
- && touch /etc/mtab \
- \
- && openssl dhparam -out /etc/postfix/dh1024.pem 1024 \
- && openssl dhparam -out /etc/postfix/dh512.pem 512
+ && touch /etc/mtab
 
 COPY config /etc/
 

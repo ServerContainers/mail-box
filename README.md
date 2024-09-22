@@ -6,6 +6,7 @@ _maintained by ServerContainers_
 * 2024-09-22
     * postfix tls fixes
     * postfix config fixes
+    * added pre generated `dh4096.pem` dh parameter file to speed up build time
 * 2024-07-18
     * dovecot ssl fixes - min version TLSv1.0
 * 2023-03-21
@@ -174,8 +175,7 @@ _for example: to set_ ___mynetworks_style = subnet___ _just add a environment va
 
 - /etc/postfix/tls
     - this is where the container looks for:
-        - dh1024.pem (to overwrite the one generated at container build)
-        - dh512.pem (to overwrite the one generated at container build)
+        - dh4096.pem (to overwrite the one generated at container build)
         - rootCA.crt (to check valid client certificates against)
         - client.crt (outgoing SSL Client cert)
         - client.key (outgoing SSL Client key)

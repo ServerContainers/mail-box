@@ -1,9 +1,21 @@
-passdb {
-  driver = sql
-  args = /etc/dovecot/dovecot-sql.conf.ext
+sql_driver = mysql
+
+mysql [MYSQL_HOST] {
+  port = [MYSQL_PORT]
+  dbname = [DB_NAME]
+  user = [DB_USER]
+  password = [DB_PASSWORD]
 }
 
-userdb {
-  driver = static
-  args = uid=vmail gid=vmail home=/var/vmail/%n@%d
+passdb sql {
+  default_password_scheme = [DEFAULT_PASS_SCHEME]
+  query = [PASSWORD_QUERY]
+}
+
+userdb static {
+  fields {
+    uid = vmail
+    gid = vmail
+    home = /var/vmail/%{user}
+  }
 }

@@ -1,3 +1,0 @@
-driver = mysql
-connect = host=[MYSQL_HOST] port=[MYSQL_PORT] dbname=[DB_NAME] user=[DB_USER] password=[DB_PASSWORD]
-default_pass_scheme = [DEFAULT_PASS_SCHEME]

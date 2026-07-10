@@ -137,12 +137,12 @@ if [ ! -f "$INITIALIZED" ]; then
   sed -i "s/\[DB_USER\]/$MYSQL_USER/g" /etc/postfix/mysql-email2email.cf
   sed -i "s/\[DB_PASSWORD\]/$MYSQL_PASSWORD/g" /etc/postfix/mysql-email2email.cf
 
-  sed -i "s/\[MYSQL_HOST\]/$MYSQL_HOST/g" /etc/dovecot/dovecot-sql.conf.ext
-  sed -i "s/\[MYSQL_PORT\]/$MYSQL_PORT/g" /etc/dovecot/dovecot-sql.conf.ext
-  sed -i "s/\[DB_NAME\]/$MYSQL_DBNAME/g" /etc/dovecot/dovecot-sql.conf.ext
-  sed -i "s/\[DB_USER\]/$MYSQL_USER/g" /etc/dovecot/dovecot-sql.conf.ext
-  sed -i "s/\[DB_PASSWORD\]/$MYSQL_PASSWORD/g" /etc/dovecot/dovecot-sql.conf.ext
-  sed -i "s/\[DEFAULT_PASS_SCHEME\]/$DEFAULT_PASS_SCHEME/g" /etc/dovecot/dovecot-sql.conf.ext
+  sed -i "s/\[MYSQL_HOST\]/$MYSQL_HOST/g" /etc/dovecot/conf.d/auth-sql.conf.ext
+  sed -i "s/\[MYSQL_PORT\]/$MYSQL_PORT/g" /etc/dovecot/conf.d/auth-sql.conf.ext
+  sed -i "s/\[DB_NAME\]/$MYSQL_DBNAME/g" /etc/dovecot/conf.d/auth-sql.conf.ext
+  sed -i "s/\[DB_USER\]/$MYSQL_USER/g" /etc/dovecot/conf.d/auth-sql.conf.ext
+  sed -i "s/\[DB_PASSWORD\]/$MYSQL_PASSWORD/g" /etc/dovecot/conf.d/auth-sql.conf.ext
+  sed -i "s/\[DEFAULT_PASS_SCHEME\]/$DEFAULT_PASS_SCHEME/g" /etc/dovecot/conf.d/auth-sql.conf.ext
 
   # update database if necessary
   if [ "$MYSQL_HOST" != "localhost" ]; then
@@ -342,10 +342,10 @@ EOF
   echo "query = $SQL_EMAIL_TO_EMAIL" >> /etc/postfix/mysql-email2email.cf
 
   if [ -z ${SQL_DOVECOT_PASSWORD_QUERY+x} ]; then
-    SQL_DOVECOT_PASSWORD_QUERY="SELECT email as user, password FROM virtual_users WHERE email='%u';"
+    SQL_DOVECOT_PASSWORD_QUERY="SELECT email as user, password FROM virtual_users WHERE email='%{user}'"
   fi
   echo ">> SQL_DOVECOT_PASSWORD_QUERY: $SQL_DOVECOT_PASSWORD_QUERY"
-  echo "password_query = $SQL_DOVECOT_PASSWORD_QUERY" >> /etc/dovecot/dovecot-sql.conf.ext
+  sed -i "s|\[PASSWORD_QUERY\]|$SQL_DOVECOT_PASSWORD_QUERY|" /etc/dovecot/conf.d/auth-sql.conf.ext
 
   ##
   # POSTFIX RAW Config ENVs
@@ -403,8 +403,8 @@ chgrp postfix /etc/postfix/m*.cf
 chmod u=rw,g=r,o= /etc/postfix/m*.cf
 chgrp vmail /etc/dovecot/dovecot.conf
 chmod g+r /etc/dovecot/dovecot.conf
-chown root:root /etc/dovecot/dovecot-sql.conf.ext
-chmod go= /etc/dovecot/dovecot-sql.conf.ext
+chown root:root /etc/dovecot/conf.d/auth-sql.conf.ext
+chmod go= /etc/dovecot/conf.d/auth-sql.conf.ext
 
 ##
 # CMD

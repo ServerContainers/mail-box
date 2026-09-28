@@ -23,7 +23,25 @@ EOF
 #
 chown -R vmail:vmail /var/vmail
 
+##
+# POSTFIX IP PROTOCOLS
+##
+
+# Listen on IPv6 too whenever the container has it (Docker network with
+# enable_ipv6). IPv4-only containers stay on ipv4 — Postfix would otherwise
+# warn about missing IPv6 support on every start. INET_PROTOCOLS overrides.
+if [ -z ${INET_PROTOCOLS+x} ]; then
+  if grep -q . /proc/net/if_inet6 2>/dev/null; then
+    INET_PROTOCOLS=all
+  else
+    INET_PROTOCOLS=ipv4
+  fi
+fi
+echo ">> postfix inet_protocols: $INET_PROTOCOLS"
+postconf -e "inet_protocols=$INET_PROTOCOLS"
+
 AVAILABLE_NETWORKS="127.0.0.0/8"
+[ "$INET_PROTOCOLS" = "ipv4" ] || AVAILABLE_NETWORKS="$AVAILABLE_NETWORKS,[::1]/128"
 if [ ! -z ${AUTO_TRUST_NETWORKS+x} ]; then
   AVAILABLE_NETWORKS=$(list-available-networks.sh | tr '\n' ',' | sed 's/,$//g')
   echo ">> trust all available networks: $AVAILABLE_NETWORKS"
@@ -75,7 +93,7 @@ if [ ! -f "$INITIALIZED" ]; then
     export MYSQL_USER=dbuser
     export MYSQL_PASSWORD=dbpassword
 
-    /usr/bin/mysqld_safe &
+    /usr/bin/mariadbd-safe &
     echo ">> waiting for mysql socket."
     while [ ! -e "/var/run/mysqld/mysqld.sock" ]; do sleep 1; echo -n "."; done
     echo ""; echo ">> mysql socket found :)"
@@ -88,7 +106,12 @@ if [ ! -f "$INITIALIZED" ]; then
 
     sh -c "mysql < /tmp/autocreatedb.mysql && echo '>> db '$MYSQL_DBNAME' successfully installed'; rm /tmp/autocreatedb.mysql; update-database.sh"
     
-    killall mysqld
+    # stop the setup instance before runit starts the supervised one.
+    # (MariaDB 11 runs as "mariadbd" — the old `killall mysqld` matched
+    # nothing, left this instance running unsupervised, and runit's mysqld
+    # service then looped on "A mysqld process already exists" forever.)
+    mariadb-admin shutdown
+    while [ -e "/var/run/mysqld/mysqld.sock" ]; do sleep 1; done
   else
     echo ">> using '$MYSQL_HOST' as Database Host"
     
@@ -369,8 +392,8 @@ EOF
   echo ">> RUNIT - create services"
   mkdir -p /etc/sv/rsyslog /etc/sv/postfix /etc/sv/dovecot /etc/sv/mysqld
   
-  echo -e '#!/bin/sh\nexec /usr/bin/mysqld_safe' > /etc/sv/mysqld/run
-    echo -e '#!/bin/sh\nkillall mysqld' > /etc/sv/mysqld/finish
+  echo -e '#!/bin/sh\nexec /usr/bin/mariadbd-safe' > /etc/sv/mysqld/run
+    echo -e '#!/bin/sh\nmariadb-admin shutdown 2>/dev/null || killall -q mariadbd' > /etc/sv/mysqld/finish
 
   
   echo -e '#!/bin/sh\nexec /usr/sbin/rsyslogd -n' > /etc/sv/rsyslog/run
@@ -390,6 +413,11 @@ EOF
   [ "$MYSQL_HOST" = "localhost" ] && ln -s /etc/sv/mysqld /etc/service/mysqld
 
 fi
+
+# dovecot's auth + lmtp sockets live in postfix's private dir; postfix only
+# creates it when it starts, and runit starts both at once. Create it up
+# front so dovecot doesn't fail its first start ("Failed to start listeners").
+install -d -o postfix -g root -m 0700 /var/spool/postfix/private
 
 ##
 # TLS Cert Renew Stuff

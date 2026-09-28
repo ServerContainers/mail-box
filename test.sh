@@ -19,13 +19,15 @@ echo ">> starting container"
 docker rm -f "$CN" >/dev/null 2>&1 || true
 docker run -d --name "$CN" -e MAIL_FQDN=mail01.test.tld "$IMG" >/dev/null
 
-echo ">> waiting for dovecot to listen on 143 (up to 120s)"
+# wait for both daemons: they start in parallel under runit, and dovecot is
+# usually up a few seconds before postfix's `service postfix start` is done
+echo ">> waiting for dovecot (143) and postfix (25) to listen (up to 120s)"
 up=0
 for _ in $(seq 1 60); do
-  if docker exec "$CN" bash -c 'exec 3<>/dev/tcp/127.0.0.1/143' 2>/dev/null; then up=1; break; fi
+  if docker exec "$CN" bash -c 'exec 3<>/dev/tcp/127.0.0.1/143 && exec 4<>/dev/tcp/127.0.0.1/25' 2>/dev/null; then up=1; break; fi
   sleep 2
 done
-[ "$up" = 1 ] || fail "dovecot did not start listening on 143 in time"
+[ "$up" = 1 ] || fail "dovecot/postfix did not start listening on 143/25 in time"
 
 echo ">> assert: container is running"
 [ "$(docker inspect -f '{{.State.Running}}' "$CN")" = true ] || fail "container not running"

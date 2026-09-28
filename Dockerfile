@@ -8,6 +8,7 @@ RUN apt-get -q -y update \
                           openssl \
                           rsyslog \
                           net-tools \
+                          iproute2 \
                           procps \
                           \
                           mariadb-client \
